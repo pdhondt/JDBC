@@ -1,16 +1,15 @@
 package be.vdab;
 
-import be.vdab.repositories.PlantRepository;
+import be.vdab.repositories.LeverancierRepository;
 
 import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) {
-        var repository = new PlantRepository();
+        var repository = new LeverancierRepository();
         try {
-            System.out.print(repository.verhoogPrijzenMet10Procent());
-            System.out.println(" planten aangepast.");
-        } catch(SQLException ex) {
+            repository.findAllNamen().forEach(System.out::println);
+        } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }
     }
