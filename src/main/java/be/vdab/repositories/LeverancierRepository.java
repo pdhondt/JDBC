@@ -20,4 +20,17 @@ public class LeverancierRepository extends AbstractRepository {
             return namen;
         }
     }
+
+    public int findAantal() throws SQLException {
+        var sql = """
+                select count(*) as aantal
+                from leveranciers
+                """;
+        try (var connection = super.getConnection();
+             var statement = connection.prepareStatement(sql)) {
+            var result = statement.executeQuery();
+            result.next();
+            return result.getInt("aantal");
+        }
+    }
 }

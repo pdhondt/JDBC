@@ -9,6 +9,8 @@ public class Main {
         var repository = new LeverancierRepository();
         try {
             repository.findAllNamen().forEach(System.out::println);
+            System.out.print("\nAantal leveranciers: ");
+            System.out.println(repository.findAantal());
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }
