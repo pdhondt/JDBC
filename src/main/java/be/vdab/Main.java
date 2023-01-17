@@ -44,12 +44,18 @@ public class Main {
         catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }*/
-        System.out.print("Woord: ");
+        /*System.out.print("Woord: ");
         var scanner = new Scanner(System.in);
         var woord = scanner.nextLine();
         var repository = new PlantRepository();
         try {
             repository.findNamenByWoord(woord).forEach(System.out::println);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
+        }*/
+        var repository = new PlantRepository();
+        try {
+            repository.verhoogPrijzenBovenEnOnder100€();
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }
