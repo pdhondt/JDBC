@@ -56,4 +56,21 @@ public class LeverancierRepository extends AbstractRepository {
                 result.getString("adres"), result.getInt("postcode"),
                 result.getString("woonplaats"), result.getObject("sinds", LocalDate.class));
     }
+
+    public List<Leverancier> findByWoonplaats(String woonplaats) throws SQLException {
+        var leveranciers = new ArrayList<Leverancier>();
+        var sql = """
+                select id, naam, adres, postcode, woonplaats, sinds
+                from leveranciers
+                where woonplaats = ?
+                """;
+        try (var connection = super.getConnection();
+            var statement = connection.prepareStatement(sql)) {
+            statement.setString(1, woonplaats);
+            for (var result = statement.executeQuery(); result.next(); ) {
+                leveranciers.add(naarLeverancier(result));
+            }
+            return leveranciers;
+        }
+    }
 }
