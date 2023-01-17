@@ -23,7 +23,7 @@ public class Main {
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }*/
-        System.out.print("Naam plant: ");
+        /*System.out.print("Naam plant: ");
         var scanner = new Scanner(System.in);
         var naam = scanner.nextLine();
         var repository = new PlantRepository();
@@ -31,6 +31,17 @@ public class Main {
             System.out.print(repository.verhoogPrijzenMet10ProcentByNaam(naam));
             System.out.println(" plant(en) aangepast.");
         } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
+        }*/
+        System.out.print("id: ");
+        var scanner = new Scanner(System.in);
+        var id = scanner.nextLong();
+        var repository = new LeverancierRepository();
+        try {
+            repository.findById(id)
+                    .ifPresentOrElse(System.out::println, () -> System.out.println("Niet gevonden"));
+        }
+        catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }
     }
