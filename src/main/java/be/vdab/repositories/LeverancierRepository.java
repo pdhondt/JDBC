@@ -107,4 +107,24 @@ public class LeverancierRepository extends AbstractRepository {
             return leveranciers;
         }
     }
+    public List<Leverancier> findBySindsVanaf(LocalDate datum) throws SQLException {
+        var leveranciers = new ArrayList<Leverancier>();
+        var sql = """
+                select id, naam, adres, postcode, woonplaats, sinds
+                from leveranciers
+                where sinds >= ?
+                """;
+        try (var connection = super.getConnection();
+             var statement = connection.prepareStatement(sql)) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            connection.setAutoCommit(false);
+            statement.setObject(1, datum);
+            var result = statement.executeQuery();
+            while (result.next()) {
+                leveranciers.add(naarLeverancier(result));
+            }
+            connection.commit();
+            return leveranciers;
+        }
+    }
 }

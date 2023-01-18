@@ -6,6 +6,8 @@ import be.vdab.repositories.PlantRepository;
 import be.vdab.repositories.SoortRepository;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Main {
@@ -73,9 +75,20 @@ public class Main {
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }*/
-        var repository = new LeverancierRepository();
+        /*var repository = new LeverancierRepository();
         try {
             repository.findBySinds2000().forEach(System.out::println);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
+        }*/
+        System.out.print("Datum vanaf (dag/maand/jaar): ");
+        var formatter = DateTimeFormatter.ofPattern("d/M/y");
+        var scanner = new Scanner(System.in);
+        var datum = LocalDate.parse(scanner.nextLine(), formatter);
+        System.out.println(datum);
+        var repository = new LeverancierRepository();
+        try {
+            repository.findBySindsVanaf(datum).forEach(System.out::println);
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }
