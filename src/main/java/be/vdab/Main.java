@@ -66,8 +66,8 @@ public class Main {
         var naam = scanner.nextLine();
         var repository = new SoortRepository();
         try {
-            repository.create(naam);
-            System.out.println("Soort toegevoegd.");
+            var nieuweId = repository.create(naam);
+            System.out.println("Soort " + naam + " toegevoegd. Het id nummer is " + nieuweId);
         } catch (SoortBestaatAlException ex) {
             System.out.println("Soort bestaat al.");
         } catch (SQLException ex) {
