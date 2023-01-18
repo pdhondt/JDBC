@@ -81,7 +81,7 @@ public class Main {
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }*/
-        System.out.print("Datum vanaf (dag/maand/jaar): ");
+        /*System.out.print("Datum vanaf (dag/maand/jaar): ");
         var formatter = DateTimeFormatter.ofPattern("d/M/y");
         var scanner = new Scanner(System.in);
         var datum = LocalDate.parse(scanner.nextLine(), formatter);
@@ -89,6 +89,12 @@ public class Main {
         var repository = new LeverancierRepository();
         try {
             repository.findBySindsVanaf(datum).forEach(System.out::println);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
+        }*/
+        var repository = new LeverancierRepository();
+        try {
+            repository.findLeverancierGewordenInHetJaar2000().forEach(System.out::println);
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }

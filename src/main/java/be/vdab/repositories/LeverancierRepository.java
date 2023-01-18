@@ -127,4 +127,23 @@ public class LeverancierRepository extends AbstractRepository {
             return leveranciers;
         }
     }
+    public List<Leverancier> findLeverancierGewordenInHetJaar2000() throws SQLException {
+        var leveranciers = new ArrayList<Leverancier>();
+        var sql = """
+                select id, naam, adres, postcode, woonplaats, sinds
+                from leveranciers
+                where {fn year(sinds)} = 2000
+                """;
+        try (var connection = super.getConnection();
+            var statement = connection.prepareStatement(sql)) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            connection.setAutoCommit(false);
+            var result = statement.executeQuery();
+            while (result.next()) {
+                leveranciers.add(naarLeverancier(result));
+            }
+            connection.commit();
+            return leveranciers;
+        }
+    }
 }
