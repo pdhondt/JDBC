@@ -1,5 +1,11 @@
 package be.vdab.repositories;
 
+import be.vdab.exceptions.PlantNietGevondenException;
+import be.vdab.exceptions.PrijsTeLaagException;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +62,43 @@ public class PlantRepository extends AbstractRepository {
             statementVanaf100.executeUpdate();
             statementTot100.executeUpdate();
             connection.commit();
+        }
+    }
+    public void verlaagPrijs(long id, BigDecimal nieuwePrijs) throws SQLException {
+        var sqlSelect = """
+                select prijs
+                from planten
+                where id = ?
+                for update
+                """;
+        try (var connection = super.getConnection();
+            var statementSelect = connection.prepareStatement(sqlSelect)) {
+            statementSelect.setLong(1, id);
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            connection.setAutoCommit(false);
+            var result = statementSelect.executeQuery();
+            if (result.next()) {
+                var oudePrijs = result.getBigDecimal("prijs");
+                var minimumNieuwePrijs = oudePrijs.divide(BigDecimal.valueOf(2), 2, RoundingMode.HALF_UP);
+                if (nieuwePrijs.compareTo(minimumNieuwePrijs) >= 0) {
+                    var sqlUpdate = """
+                            update planten
+                            set prijs = ?
+                            where id = ?
+                            """;
+                    try (var statementUpdate = connection.prepareStatement(sqlUpdate)) {
+                        statementUpdate.setBigDecimal(1, nieuwePrijs);
+                        statementUpdate.setLong(2, id);
+                        statementUpdate.executeUpdate();
+                        connection.commit();
+                        return;
+                    }
+                }
+                connection.rollback();
+                throw new PrijsTeLaagException();
+            }
+            connection.rollback();
+            throw new PlantNietGevondenException();
         }
     }
 }
