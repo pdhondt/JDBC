@@ -61,7 +61,7 @@ public class Main {
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }*/
-        System.out.print("Naam: ");
+        /*System.out.print("Naam: ");
         var scanner = new Scanner(System.in);
         var naam = scanner.nextLine();
         var repository = new SoortRepository();
@@ -70,6 +70,12 @@ public class Main {
             System.out.println("Soort " + naam + " toegevoegd. Het id nummer is " + nieuweId);
         } catch (SoortBestaatAlException ex) {
             System.out.println("Soort bestaat al.");
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
+        }*/
+        var repository = new LeverancierRepository();
+        try {
+            repository.findBySinds2000().forEach(System.out::println);
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }
