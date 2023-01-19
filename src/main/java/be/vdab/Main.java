@@ -10,6 +10,7 @@ import be.vdab.repositories.SoortRepository;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -131,9 +132,22 @@ public class Main {
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }*/
-        var repository = new PlantRepository();
+        /*var repository = new PlantRepository();
         try {
             repository.findRodePlantenEnHunLeveranciers().forEach(System.out::println);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
+        }*/
+        var namen = new ArrayList<String>();
+        var scanner = new Scanner(System.in);
+        System.out.print("Naam (stop met STOP): ");
+        for (String naam; ! "STOP".equals(naam = scanner.nextLine()); ) {
+            namen.add(naam);
+        }
+        var repository = new SoortRepository();
+        try {
+            var gegenereerdeIds = repository.create(namen);
+            gegenereerdeIds.forEach(System.out::println);
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }
