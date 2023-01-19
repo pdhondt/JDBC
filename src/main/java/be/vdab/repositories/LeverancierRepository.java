@@ -68,10 +68,14 @@ public class LeverancierRepository extends AbstractRepository {
                 """;
         try (var connection = super.getConnection();
             var statement = connection.prepareStatement(sql)) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            connection.setAutoCommit(false);
             statement.setString(1, woonplaats);
-            for (var result = statement.executeQuery(); result.next(); ) {
+            var result = statement.executeQuery();
+            while (result.next()) {
                 leveranciers.add(naarLeverancier(result));
             }
+            connection.commit();
             return leveranciers;
         }
     }

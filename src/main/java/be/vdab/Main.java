@@ -10,6 +10,7 @@ import be.vdab.repositories.SoortRepository;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class Main {
@@ -100,7 +101,7 @@ public class Main {
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }*/
-        var scanner = new Scanner(System.in);
+        /*var scanner = new Scanner(System.in);
         System.out.print("Nummer plant: ");
         var id = scanner.nextLong();
         System.out.print("Nieuwe prijs: ");
@@ -116,6 +117,18 @@ public class Main {
             System.out.println("Prijs te laag.");
         }
         catch (SQLException ex) {
+            ex.printStackTrace(System.err);
+        }*/
+        var ids = new HashSet<Long>();
+        var scanner = new Scanner(System.in);
+        System.out.print("Nummer plant (0 om te stoppen):");
+        for (long id; (id = scanner.nextInt()) != 0; ) {
+            ids.add(id);
+        }
+        var repository = new PlantRepository();
+        try {
+            repository.findNamenByIds(ids).forEach(System.out::println);
+        } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }
     }

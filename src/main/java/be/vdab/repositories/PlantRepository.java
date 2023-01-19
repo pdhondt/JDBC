@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class PlantRepository extends AbstractRepository {
     public int verhoogPrijzenMet10Procent() throws SQLException {
@@ -102,6 +103,34 @@ public class PlantRepository extends AbstractRepository {
                 connection.rollback();
                 throw new PrijsTeLaagException();
             }
+        }
+    }
+    public List<String> findNamenByIds(Set<Long> ids) throws SQLException {
+        if (ids.isEmpty()) {
+            return List.of();
+        }
+        var namen = new ArrayList<String>();
+        var sql = """
+                select naam
+                from planten
+                where id in (
+                """
+                + "?,".repeat(ids.size() - 1)
+                + "?)";
+        try (var connection = super.getConnection();
+            var statement = connection.prepareStatement(sql)) {
+            var index = 1;
+            for (var id : ids) {
+                statement.setLong(index++, id);
+            }
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            connection.setAutoCommit(false);
+            var result = statement.executeQuery();
+            while (result.next()) {
+                namen.add(result.getString("naam"));
+            }
+            connection.commit();
+            return namen;
         }
     }
 }
