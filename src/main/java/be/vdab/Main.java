@@ -119,7 +119,7 @@ public class Main {
         catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }*/
-        var ids = new HashSet<Long>();
+        /*var ids = new HashSet<Long>();
         var scanner = new Scanner(System.in);
         System.out.print("Nummer plant (0 om te stoppen):");
         for (long id; (id = scanner.nextInt()) != 0; ) {
@@ -128,6 +128,12 @@ public class Main {
         var repository = new PlantRepository();
         try {
             repository.findNamenByIds(ids).forEach(System.out::println);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
+        }*/
+        var repository = new PlantRepository();
+        try {
+            repository.findRodePlantenEnHunLeveranciers().forEach(System.out::println);
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }
